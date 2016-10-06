@@ -60,9 +60,9 @@ int main()
   hipModuleLaunchKernel(Function, 1, 1, 1, LEN, 1, 1, 0, 0, NULL, (void**)&config);
 
   hipMemcpyDtoH(Out, Outd, SIZE);
-  for(uint32_t i=0;i<LEN/2;i++)
-  {
-	  assert(Out[i] == In[i + 32]);
-  }
+
+  assert(Out[0] == 64);
+
   std::cout<<"Passed!"<<std::endl;
+
 }

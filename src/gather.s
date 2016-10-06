@@ -81,6 +81,8 @@ hello_world:
   s_waitcnt     vmcnt(0) & lgkmcnt(0)
   v_lshlrev_b32  v1, 2, v1
   ds_permute_b32  v1, v1, v2
+  s_waitcnt lgkmcnt(0)
+  v_add_u32  v1, vcc, v1, v1
   v_add_u32     v3, vcc, s4, v0
   v_mov_b32     v2, s5
   v_addc_u32    v4, vcc, v2, 0, vcc
