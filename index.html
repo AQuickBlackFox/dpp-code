@@ -33,9 +33,9 @@
 <p>
 DPP mean Data Parallel Primitives on AMD GPUs. DPPs are used to communicate data between workitems on a SIMD/CU on AMDGPUs. Using LDS for inter work item is the usual way to go but, it can be done better with DPPs. The first one in line DPPs are 
 
-<code>ds_permute_b32 dest, addr, src </code>
+<code>ds_permute_b32 dest, addr, src </code> This instruction pushes value from index present in `addr` from `src` to `dest`. Here `addr` acts as index for the operation. Consider `|10|20|30|40|` as `src`, `|2|2|0|1|` as `addr` doing `ds_permute_b32 dest, addr, src` makes `dest` as `|30|40|10|-|` or `|30|40|20|-|` . Note that this happens for across all 16 lanes (workitems).
 
-<code>ds_bpermute_b32 dest, addr, src </code>
+<code>ds_bpermute_b32 dest, addr, src </code> This instruction pulls value from index present in `addr` from `src` to `dest`. Consider `|10|20|30|40|` as `src`, `|1|1|1|1|` as `addr` doing `ds_bpermute_b32 dest, addr, src` makes `dest` as `|20|20|20|20|`.
 </p>
 
 <h3>
