@@ -44,6 +44,32 @@ Permute Instructions
 <code>ds_bpermute_b32 dest, addr, src </code> This instruction pulls value from index present in <code>addr</code> from <code>src</code> to <code>dest</code>. Consider <code>|10|20|30|40|</code> as <code>src</code>, <code>|1|1|1|1|</code> as <code>addr</code> doing <code>ds_bpermute_b32 dest, addr, src</code> makes <code>dest</code> as <code>|20|20|20|20|</code>.
 </p>
 
+<h4>
+Swizzle Instructions
+</h4>
+<p>
+The swizzle instruction operate in two modes.
+1. Quad-Permute Mode
+2. Bit-Masks Mode
+
+The ISA goes by <code> ds_swizzle_b32 dest, src offset:ds_pattern </code>
+The setting/unsetting 16th bit of <code>ds_pattern</code> switches between different types of swizzle modes.
+Quad-Permute Mode moves data between four lanes in a single SIMD.
+</p>
+<h5>
+Quad-Permute Mode
+</h5>
+<p>
+This mode is enabled by setting 16th bit to one.
+</p>
+
+<h5>
+Bit-Masks Mode
+</h5>
+<p>
+This mode is enabled by setting 16th bit to zero.
+</p>
+
 <h3>
 <a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
 
