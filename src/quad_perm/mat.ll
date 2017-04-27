@@ -5,20 +5,27 @@ define linkonce_odr float @tp_0(float) {
   ret float %ret
 }
 
-define linkonce_odr float @tp_1(float) {
-  %ret = tail call float asm "v_mov_b32 $0, $1 quad_perm:[1,1,1,1]","=v,v"(float %0)
-  ret float %ret
+define linkonce_odr void @tp_1(float, float, float) {
+;  %4 = tail call float asm "v_mov_b32 $0, $1 quad_perm:[1,1,1,1]","=v,v"(float %2)
+;  tail call void asm sideeffect "v_mac_f32 $0, $1, $2","v,v,v"(float %0, float %1, float %4)
+  tail call void asm sideeffect "v_mac_f32 $0, $1, $2 quad_perm:[1,1,1,1]","v,v,v"(float %0, float %1, float %2)
+  ret void
 }
 
-define linkonce_odr float @tp_2(float) {
-  %ret = tail call float asm "v_mov_b32 $0, $1 quad_perm:[2,2,2,2]","=v,v"(float %0)
-  ret float %ret
+define linkonce_odr void @tp_2(float, float, float) {
+;  %4 = tail call float asm "v_mov_b32 $0, $1 quad_perm:[2,2,2,2]","=v,v"(float %2)
+;  tail call void asm sideeffect "v_mac_f32 $0, $1, $2","v,v,v"(float %0, float %1, float %4)
+  tail call void asm sideeffect "v_mac_f32 $0, $1, $2 quad_perm:[2,2,2,2]","v,v,v"(float %0, float %1, float %2)
+  ret void
 }
 
-define linkonce_odr float @tp_3(float) {
-  %ret = tail call float asm "v_mov_b32 $0, $1 quad_perm:[3,3,3,3]","=v,v"(float %0)
-  ret float %ret
+define linkonce_odr void @tp_3(float, float, float) {
+;  %4 = tail call float asm "v_mov_b32 $0, $1 quad_perm:[3,3,3,3]","=v,v"(float %2)
+;  tail call void asm sideeffect "v_mac_f32 $0, $1, $2","v,v,v"(float %0, float %1, float %4)
+  tail call void asm sideeffect "v_mac_f32 $0, $1, $2 quad_perm:[3,3,3,3]","v,v,v"(float %0, float %1, float %2)
+  ret void
 }
+
 
 define amdgpu_kernel void @Run(float addrspace(1)* %vertex, float addrspace(1)* %transform, float addrspace(1)* %output)
 {
@@ -45,19 +52,13 @@ define amdgpu_kernel void @Run(float addrspace(1)* %vertex, float addrspace(1)* 
   %tmp0 = tail call float @tp_0(float %v)
   %o0 = fmul float %t0, %tmp0
 
-  %tmp1 = tail call float @tp_1(float %v)
-  %o1 = fmul float %t1, %tmp1
-  %o11 = fadd float %o1, %o0
+  tail call void @tp_1(float %o0, float %v, float %t1)
 
-  %tmp2 = tail call float @tp_2(float %v)
-  %o2 = fmul float %t2, %tmp2
-  %o22 = fadd float %o2, %o11
+  tail call void @tp_2(float %o0, float %v, float %t2)
+ 
+  tail call void @tp_3(float %o0, float %v, float %t3)
 
-  %tmp3 = tail call float @tp_3(float %v)
-  %o3 = fmul float %t3, %tmp3
-  %o33 = fadd float %o3, %o22
-
-  store float %o33, float addrspace(1)* %ogep
+  store float %o0, float addrspace(1)* %ogep
   ret void
 }
 
