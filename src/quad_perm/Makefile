@@ -27,7 +27,11 @@ qp3:
 	$(CLANG) -target $(TARGET) qp3.o -o qp3.co
 	$(HIPCC) hipQP3.cpp -o hipQP3.out
 
-
+mat:
+	$(LLC) -mtriple $(TARGET) -march=$(ARCH) -mcpu=$(CPU) mat.ll -o mat.s
+	$(CLANG) -x assembler -target $(TARGET) -mcpu=$(CPU) -c mat.s -o mat.o
+	$(CLANG) -target $(TARGET) mat.o -o mat.co
+	$(HIPCC) mat.cpp -o mat.out
 
 clean:
 	rm -rf *.out *.o *.s *.co
