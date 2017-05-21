@@ -1,3 +1,27 @@
+/* Add the following IR code to /opt/rocm/hip/lib/hip_hc_gfx803.ll
+
+define float @__hip_hc_cu_reducex64_f32(float %a) #1 {
+  %1 = tail call float asm sideeffect "
+            v_add_f32 $0, $1, $1 row_shr:1 bound_ctrl:0
+            v_add_f32 $0, $1, $0 row_shr:2 bound_ctrl:0
+            v_add_f32 $0, $1, $0 row_shr:3 bound_ctrl:0
+            v_nop
+            v_nop
+            v_add_f32 $0, $0, $0 row_shr:4 bank_mask:0xe
+            v_nop
+            v_nop
+            v_add_f32 $0, $0, $0 row_shr:8 bank_mask:0xc
+            v_nop
+            v_nop
+            v_add_f32 $0, $0, $0 row_bcast:15 row_mask:0xa
+            v_nop
+            v_nop
+            v_add_f32 $0, $0, $0 row_bcast:31 row_mask:0xc
+            ","=v,v"(float %a)
+  ret float %1
+}
+*/
+
 #include<hip/hip_runtime.h>
 #include<hip/hip_runtime_api.h>
 #include<iostream>
