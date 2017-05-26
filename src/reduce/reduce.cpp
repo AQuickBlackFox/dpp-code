@@ -2,7 +2,7 @@
 #include<hip/hip_runtime.h>
 #include<iostream>
 
-#define LEN 1024
+#define LEN 65536
 #define SIZE LEN << 2
 
 extern "C" void __hip_hc_cu_reducex64_f32(float, float);
@@ -51,6 +51,7 @@ __global__ void ReduceLane64(T *i_data, T *o_data, unsigned int n)
     if(tid == 63) { o_data[hipBlockIdx_x] = val; }
 }
 
+
 int main(){
     float *A, *B, *Ad, *Bd;
     A = new float[LEN];
@@ -71,7 +72,7 @@ int main(){
 	hipDeviceSynchronize();
     hipMemcpy(B, Bd, SIZE, hipMemcpyDeviceToHost);
 
-    for(int i=0;i<4;i++) { std::cout<< B[i] << std::endl; }
+    for(int i=0;i<65536/1024 + 1;i++) { std::cout<< B[i] << std::endl; }
     std::cout<<B[0]<<std::endl;
 	delete A;
 	delete B;
