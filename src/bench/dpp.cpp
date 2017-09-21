@@ -31,7 +31,7 @@ __global__ void Kernel(T* Out, T *In) {
 
 typedef float __float4 __attribute__((ext_vector_type(4)));
 
-__global__ void Kernel(__float4* Out, __float4 *In) {
+__global__ void Kernelx4(__float4* Out, __float4 *In) {
     int tx = hipThreadIdx_x;
     __float4 in = In[tx];
     __float4 out = Out[tx];
@@ -83,7 +83,7 @@ __global__ void Kernel(__float4* Out, __float4 *In) {
                         v_add_f32 %4, %4, %4 row_bcast:31 row_mask:0xc \n \
                         \n \
                         v_add_f32 %6, %6, %6 row_bcast:31 row_mask:0xc \n \
-                        " :  : "v"(out.x),"v"(in.x + out.x),"v"(out.y), "v"(in.y + out.y), "v"(out.y), "v"(in.y+out.y), "v"(out.z), "v"(out.z+in.z));
+                        " :  : "v"(out.x),"v"(in.x + out.x),"v"(out.y), "v"(in.y + out.y), "v"(out.y), "v"(in.y+out.y), "v"(out.z), "v"(out.z+in.z), "v"(out.w), "v"(out.w+in.w));
     }
     Out[tx] = out;
 }
@@ -124,7 +124,7 @@ int main() {
     hipMemcpy(dOut, hOut, SIZE, hipMemcpyHostToDevice);
 
     start = std::chrono::high_resolution_clock::now();
-    hipLaunchKernelGGL(Kernel, dim3(wg,1,1), dim3(LEN/4,1,1), 0, 0, reinterpret_cast<__float4*>(dOut), reinterpret_cast<__float4*>(dIn));
+    hipLaunchKernelGGL(Kernelx4, dim3(wg,1,1), dim3(LEN/4,1,1), 0, 0, reinterpret_cast<__float4*>(dOut), reinterpret_cast<__float4*>(dIn));
     hipDeviceSynchronize();
     stop = std::chrono::high_resolution_clock::now();
 
