@@ -4,7 +4,7 @@
 
 typedef float U;
 
-#define LEN 64
+#define LEN 1024
 #define SIZE (LEN * sizeof(U))
 
 template<typename T, int shift>
@@ -53,9 +53,9 @@ int main() {
     hipDeviceSynchronize();
 
     hipMemcpy(hOut, dOut, SIZE, hipMemcpyDeviceToHost);
-    for(int j=0;j<8;j++){
-        for(int i=0;i<8;i++) {
-            std::cout<<hOut[i+j*8]<<" ";
+    for(int j=0;j<LEN/16;j++){
+        for(int i=0;i<16;i++) {
+            std::cout<<hOut[i+j*16]<<" ";
         }
         std::cout<<std::endl;
     }
@@ -66,9 +66,9 @@ int main() {
     hipDeviceSynchronize();
 
     hipMemcpy(hOut, dOut, SIZE, hipMemcpyDeviceToHost);
-    for(int j=0;j<8;j++){
-        for(int i=0;i<8;i++) {
-            std::cout<<hOut[i+j*8]<<" ";
+    for(int j=0;j<LEN/16;j++){
+        for(int i=0;i<16;i++) {
+            std::cout<<hOut[i+j*16]<<" ";
         }
         std::cout<<std::endl;
     }
@@ -79,9 +79,9 @@ int main() {
     hipDeviceSynchronize();
 
     hipMemcpy(hOut, dOut, SIZE, hipMemcpyDeviceToHost);
-    for(int j=0;j<8;j++){
-        for(int i=0;i<8;i++) {
-            std::cout<<hOut[i+j*8]<<" ";
+    for(int j=0;j<LEN/16;j++){
+        for(int i=0;i<16;i++) {
+            std::cout<<hOut[i+j*16]<<" ";
         }
         std::cout<<std::endl;
     }
@@ -92,9 +92,9 @@ int main() {
     hipDeviceSynchronize();
 
     hipMemcpy(hOut, dOut, SIZE, hipMemcpyDeviceToHost);
-    for(int j=0;j<8;j++){
-        for(int i=0;i<8;i++) {
-            std::cout<<hOut[i+j*8]<<" ";
+    for(int j=0;j<LEN/16;j++){
+        for(int i=0;i<16;i++) {
+            std::cout<<hOut[i+j*16]<<" ";
         }
         std::cout<<std::endl;
     }
@@ -105,9 +105,9 @@ int main() {
     hipDeviceSynchronize();
 
     hipMemcpy(hOut, dOut, SIZE, hipMemcpyDeviceToHost);
-    for(int j=0;j<8;j++){
-        for(int i=0;i<8;i++) {
-            std::cout<<hOut[i+j*8]<<" ";
+    for(int j=0;j<LEN/16;j++){
+        for(int i=0;i<16;i++) {
+            std::cout<<hOut[i+j*16]<<" ";
         }
         std::cout<<std::endl;
     }
