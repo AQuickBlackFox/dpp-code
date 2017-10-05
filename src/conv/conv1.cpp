@@ -27,7 +27,7 @@ int main() {
     HIP_CHECK(hipInit(0));
     hipDevice_t device;
     hipCtx_t context;
-    HIP_CHECK(hipDeviceGet(&device, 0));
+    HIP_CHECK(hipDeviceGet(&device, 1));
     HIP_CHECK(hipCtxCreate(&context, 0, device));
 
     HIP_CHECK(hipMalloc((void**)&dwImage, SIZE));
