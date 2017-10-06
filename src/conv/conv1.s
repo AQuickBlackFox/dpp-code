@@ -57,7 +57,7 @@ hello_world:                            ; @hello_world
 		kernarg_segment_byte_size = 24
 		workgroup_fbarrier_count = 0
 		wavefront_sgpr_count = 10
-		workitem_vgpr_count = 6
+		workitem_vgpr_count = 24
 		reserved_vgpr_first = 0
 		reserved_vgpr_count = 0
 		reserved_sgpr_first = 0
@@ -84,31 +84,76 @@ hello_world:                            ; @hello_world
 	v_add_i32_e32 v2, vcc, s4, v2
 	v_mov_b32_e32 v4, s5
 	v_addc_u32_e32 v3, vcc, v4, v3, vcc
-	global_load_dword v0, v[0:1], off
-	global_load_dword v1, v[2:3], off
-	s_load_dwordx2 s[2:3], s[0:1], 0x0
-        s_load_dwordx2 s[4:5], s[0:1], 0x8
-        s_load_dwordx2 s[6:7], s[0:1], 0x10
-        s_load_dwordx2 s[8:9], s[0:1], 0x18
-	s_waitcnt vmcnt(1) lgkmcnt(0)
-	v_mul_f32_e32 v4, s3, v0
-	s_waitcnt vmcnt(0)
-	v_mac_f32_e32 v1, s2, v0
-	v_mul_f32_e32 v5, s4, v0
+	global_load_dword v5, v[0:1], off
+        global_load_dword v6, v[0:1], off offset:64
+        global_load_dword v7, v[0:1], off offset:128
+;        global_load_dword v8, v[0:1], off offset:192
+
+;        global_load_dword v9, v[0:1], off offset:256
+;        global_load_dword v10, v[0:1], off offset:320
+;        global_load_dword v11, v[0:1], off offset:384
+;        global_load_dword v12, v[0:1], off offset:448
+
+;        global_load_dword v13, v[0:1], off offset:512
+;        global_load_dword v14, v[0:1], off offset:576
+;        global_load_dword v15, v[0:1], off offset:640
+;        global_load_dword v16, v[0:1], off offset:704
+
+;        global_load_dword v17, v[0:1], off offset:768
+;        global_load_dword v18, v[0:1], off offset:832
+;        global_load_dword v19, v[0:1], off offset:896
+;        global_load_dword v20, v[0:1], off offset:960
+
+	global_load_dword v4, v[2:3], off
+	s_load_dwordx4 s[4:7], s[0:1], 0x0
+        s_load_dwordx4 s[8:11], s[0:1], 0x10
+        s_load_dwordx4 s[12:15], s[0:1], 0x20
+        s_load_dword s16, s[0:1], 0x30
+        s_waitcnt vmcnt(0) lgkmcnt(0)
+;
+        v_mac_f32 v4, s4, v5
+        v_mul_f32 v1, s5, v5
         v_nop
-	;;#ASMSTART
-	v_add_f32 v1, v4, v1 row_shl:1 bound_ctrl:0
-	;;#ASMEND
-	v_mul_f32_e32 v0, s5, v0
         v_nop
-	;;#ASMSTART
-	v_add_f32 v1, v5, v1 row_shl:2 bound_ctrl:0
-	;;#ASMEND
-	;;#ASMSTART
+        v_add_f32 v4, v1, v4 row_shl:1 bound_ctrl:0
+        v_mul_f32 v1, s6, v5
         v_nop
-	v_add_f32 v0, v0, v1 row_shl:3 bound_ctrl:0
-	;;#ASMEND
-	global_store_dword v[2:3], v0, off
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:2 bound_ctrl:0
+        v_mul_f32 v1, s7, v5
+        v_nop
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:3 bound_ctrl:0
+;
+        v_mac_f32 v4, s8, v6
+        v_mul_f32 v1, s9, v6
+        v_nop
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:1 bound_ctrl:0
+        v_mul_f32 v1, s10, v6
+        v_nop
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:2 bound_ctrl:0
+        v_mul_f32 v1, s11, v6
+        v_nop
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:3 bound_ctrl:0
+;
+        v_mac_f32 v4, s12, v7
+        v_mul_f32 v1, s13, v7
+        v_nop
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:1 bound_ctrl:0
+        v_mul_f32 v1, s14, v7
+        v_nop
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:2 bound_ctrl:0
+        v_mul_f32 v1, s15, v7
+        v_nop
+        v_nop
+        v_add_f32 v4, v1, v4 row_shl:3 bound_ctrl:0 
+;
+	global_store_dword v[2:3], v4, off
 	s_endpgm
 .Lfunc_end0:
 	.size	hello_world, .Lfunc_end0-hello_world
@@ -117,7 +162,7 @@ hello_world:                            ; @hello_world
 ; Kernel info:
 ; codeLenInByte = 144
 ; NumSgprs: 10
-; NumVgprs: 6
+; NumVgprs: 1
 ; ScratchSize: 0
 ; FloatMode: 192
 ; IeeeMode: 1
@@ -160,7 +205,7 @@ Kernels:
     CodeProps:       
       KernargSegmentSize: 24
       WavefrontNumSGPRs: 10
-      WorkitemNumVGPRs: 6
+      WorkitemNumVGPRs: 1
       KernargSegmentAlign: 4
       GroupSegmentAlign: 4
       PrivateSegmentAlign: 4
